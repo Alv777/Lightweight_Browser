@@ -31,6 +31,12 @@ body:
         - Windows
         - Linux
   - type: textarea
+    id: screenshots
+    attributes:
+      label: [OPTIONAL] Screenshots
+      description: You can attach here screenshots you think could help explain the problem better.
+      placeholder: Drop an image here or click below on "Attach files".
+  - type: textarea
     id: logs
     attributes:
       label: Relevant log output

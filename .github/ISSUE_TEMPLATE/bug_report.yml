@@ -33,7 +33,7 @@ body:
       label: "[OPTIONAL] Screenshots"
       description: "You can attach here screenshots you think could help explain the problem better."
       placeholder: "Drop an image here or click below on Attach files."
-    - type: dropdown
+  - type: dropdown
     id: browsers
     attributes:
       label: "Which operating system are you running?"

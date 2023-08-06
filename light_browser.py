@@ -13,7 +13,7 @@ class MainWindow(QMainWindow):
         self.browser.setUrl(QUrl('https://google.com'))
         self.setCentralWidget(self.browser)
         self.showMaximized()
-
+        
 
         # Navigation Bar
         navbar = QToolBar()
@@ -46,19 +46,14 @@ class MainWindow(QMainWindow):
 
         self.browser.urlChanged.connect(self.update_url)
         
-        self.resize(800, 600) # Set width and height (Doesn't even work but at least it's a razonable size lol)
+        self.resize(800, 600) # Set width and height (Doesn't even work but at least it's a reasonable size lol)
         
     def newTabHandler(self):
         tab_widget = self.parentWidget().parentWidget()
         print(tab_widget)
         count = tab_widget.count()
-        #print(count + 1) # Total tabs opened
         win = MainWindow()
         tab_widget.addTab(win, "New Tab {}".format(count + 1))
-        tab_widget.setTabsClosable(True)
-        tab_widget.tabCloseRequested.connect(self.close_tab)
-        tab_widget.setDocumentMode(True)
-        tab_widget.setMovable(True)
     
     def close_tab(self, index):
         tab_widget = self.parentWidget() 
@@ -84,6 +79,7 @@ if (__name__ == "__main__"):
     tabs.addTab(win, "New Tab 1" )
     tabs.show()
     tabs.setTabsClosable(True)
+    tabs.tabCloseRequested.connect(win.close_tab)
     tabs.setDocumentMode(True)
     tabs.setMovable(True)
     sys.exit (app.exec_())

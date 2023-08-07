@@ -22,6 +22,19 @@
 ## Introduction
 Light Browser aims to provide an open-source fast and resource efficient browser with modern design. Using python as it's programming code we can not only achieve using the least ammount of storage, but we can also achieve fast browsing, altough this is limited for the browser engine so the C edition would be a lot faster and will probably use less storage. But for now I'm working on making the best version I can, trying to find the limitations of python and also learning on the way.
 
+### Interface: 
+<img width="1024" align="center" src=https://github.com/Alv777/Lightweight_Browser/assets/35309997/9fe8d5ad-1af2-4dad-ad1a-3f09b2464486>
+
+(subject to change)
+### Performance:
+
+Light Browser             |  Google Chrome
+:-------------------------:|:-------------------------:
+<img width="1100" align="center" src=https://github.com/Alv777/Lightweight_Browser/assets/35309997/803b18cf-d37b-4a00-87dd-9c28e55b4693> |  <img width="1024" align="center" src=https://github.com/Alv777/Lightweight_Browser/assets/35309997/77cc2051-9b7d-49ab-aca3-a075f62aa160>
+<img width="650" align="center" src=https://github.com/Alv777/Lightweight_Browser/assets/35309997/7388f8b2-744d-4569-b32a-6f9729ce22a5>| <img width="650" align="center" src=https://github.com/Alv777/Lightweight_Browser/assets/35309997/4ac434b8-1163-4e4b-94c5-639da39362b3>
+
+As you can see, with the same ammount of tabs opened we get less ram usage, about a decrease of -39% which it isnt much but still amazing having in mind we are using the same engine, have to add that light browser will be optimized and even changed completly in langauge which will decrease ram usage very drastically. This is even the first stable version and has amazed me to be honest.
+
 Trello board: https://trello.com/b/BSmCyDYt
 ## How to build
 #### 1. First you have to install the compiler, make sure you have python and pip installed and then run on a terminal:

@@ -59,6 +59,8 @@ class MainWindow(QMainWindow):
         tab_widget = self.parentWidget() 
         tab_widget = tab_widget.parentWidget()
         tab_widget.removeTab(index)
+        if tab_widget.count() == 0:
+            self.newTabHandler()
 
     def navigate_home(self):
         self.browser.setUrl(QUrl('https://google.com'))

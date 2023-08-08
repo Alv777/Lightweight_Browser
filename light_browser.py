@@ -5,6 +5,45 @@ from PyQt5.QtWidgets import (QFormLayout, QSizePolicy, QAction, QToolBar, QAppli
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import QUrl
 
+class TabWidget(QtWidgets.QTabWidget):
+    def __init__(self, *args, **kwargs):
+        super(TabWidget, self).__init__(*args, **kwargs)
+        self.pinned_tabs = []
+        
+    def contextMenuEvent(self, event):
+        index = self.tabBar().tabAt(event.pos())
+        if index >= 0:
+            menu = QtWidgets.QMenu(self)
+            close_action = menu.addAction("Close Tab")
+            close_action.triggered.connect(lambda: self.tabCloseRequested.emit(index))
+            widget = self.widget(index)
+            if widget in self.pinned_tabs:
+                close_action.setEnabled(False)
+                pin_action = menu.addAction("Unpin")
+                pin_action.triggered.connect(lambda: self.unpin_tab(widget))
+            else:
+                pin_action = menu.addAction("Pin")
+                pin_action.triggered.connect(lambda: self.pin_tab(widget))
+            menu.exec_(event.globalPos())
+            
+    def pin_tab(self, widget):
+        if widget not in self.pinned_tabs:
+            self.pinned_tabs.append(widget)
+            self.tabBar().setTabButton(self.indexOf(widget), QtWidgets.QTabBar.RightSide, None)
+            
+    def unpin_tab(self, widget):
+        if widget in self.pinned_tabs:
+            self.pinned_tabs.remove(widget)
+            index = self.indexOf(widget)
+            close_button = QtWidgets.QToolButton(self.tabBar())
+            close_button.setIcon(self.style().standardIcon(QtWidgets.QStyle.SP_TitleBarCloseButton))
+            close_button.clicked.connect(lambda: self.tabCloseRequested.emit(index))
+            self.tabBar().setTabButton(index, QtWidgets.QTabBar.RightSide, close_button)
+
+class SettingsWindow(QMainWindow):
+    def __init__(self):
+        super(SettingsWindow, self).__init__()
+        
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -44,6 +83,10 @@ class MainWindow(QMainWindow):
         self.url_bar.returnPressed.connect(self.navigate_to_url)
         navbar.addWidget(self.url_bar)
 
+        settings_tab = QAction('Settings', self)
+        settings_tab.triggered.connect(self.settingsTabHandler)
+        navbar.addAction(settings_tab)
+        self.settings_tab_open = False
         self.browser.urlChanged.connect(self.update_url)
         
         self.resize(800, 600) # Set width and height (Doesn't even work but at least it's a reasonable size lol)
@@ -51,9 +94,22 @@ class MainWindow(QMainWindow):
     def newTabHandler(self):
         tab_widget = self.parentWidget().parentWidget()
         print(tab_widget)
-        count = tab_widget.count()
         win = MainWindow()
-        tab_widget.addTab(win, "New Tab {}".format(count + 1))
+        tab_widget.addTab(win, "New Tab")
+    
+    def settingsTabHandler(self):
+        tab_widget = self.parentWidget().parentWidget()
+        settings_tab_open = False
+        for i in range(tab_widget.count()):
+            if tab_widget.tabText(i) == "Settings":
+                settings_tab_open = True
+                break
+        if not settings_tab_open:
+            win = SettingsWindow()
+            tab_widget.addTab(win, "Settings")
+        else:
+            # Mostrar un mensaje al usuario o simplemente no hacer nada
+            pass
     
     def close_tab(self, index):
         tab_widget = self.parentWidget() 
@@ -76,9 +132,9 @@ class MainWindow(QMainWindow):
 if (__name__ == "__main__"):
     app = QtWidgets.QApplication(sys.argv)
     QApplication.setStyle("fusion")
-    tabs = QtWidgets.QTabWidget()
+    tabs = TabWidget()
     win = MainWindow()
-    tabs.addTab(win, "New Tab 1" )
+    tabs.addTab(win, "New Tab")
     tabs.show()
     tabs.setTabsClosable(True)
     tabs.tabCloseRequested.connect(win.close_tab)

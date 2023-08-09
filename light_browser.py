@@ -43,7 +43,66 @@ class TabWidget(QtWidgets.QTabWidget):
 class SettingsWindow(QMainWindow):
     def __init__(self):
         super(SettingsWindow, self).__init__()
+        self.initUI()
         
+    def initUI(self):
+        self.formLayout = QFormLayout()
+        self.modeGroup = QtWidgets.QButtonGroup(self)
+        
+        self.darkModeRadio = QtWidgets.QRadioButton("Dark Mode")
+        self.lightModeRadio = QtWidgets.QRadioButton("Light Mode")
+        
+        self.modeGroup.addButton(self.darkModeRadio)
+        self.modeGroup.addButton(self.lightModeRadio)
+        
+        self.formLayout.addRow(self.darkModeRadio)
+        self.formLayout.addRow(self.lightModeRadio)
+        
+        self.applyButton = QPushButton("Apply")
+        self.applyButton.clicked.connect(self.applyMode)
+        
+        self.formLayout.addRow(self.applyButton)
+        
+        widget = QtWidgets.QWidget()
+        widget.setLayout(self.formLayout)
+        self.setCentralWidget(widget)
+    
+    def applyMode(self):
+        if (self.darkModeRadio.isChecked()):
+            print("dark")
+            app = QApplication.instance()
+            app.setStyleSheet("""
+                QWidget {
+                    background-color: #3a3a3a;
+                    color: #F0F0F0;
+                    border: 0px solid #32414B;
+                    padding: 0px;
+                    selection-background-color: #1464A0;
+                    selection-color: #F0F0F0;
+                }
+                QLineEdit {
+                    background-color: #3a3a3a;
+                    color: #F0F0F0;
+                    border: 1px solid #32414B;
+                    padding: 5px;
+                }
+                QPushButton {
+                    background-color: #3a3a3a;
+                    border: 1px solid darkgray;
+                    color: #F0F0F0;
+                    padding: 3px; 
+                    border-radius: 5px;
+                }
+                QPushButton:hover {
+                    background-color: #5c5c5c;
+                    border: 1px solid darkgray; 
+                }
+            """)
+
+        elif (self.lightModeRadio.isChecked()):
+            print("light")
+            app = QApplication.instance()
+            app.setStyleSheet("")
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -108,7 +167,6 @@ class MainWindow(QMainWindow):
             win = SettingsWindow()
             tab_widget.addTab(win, "Settings")
         else:
-            # Mostrar un mensaje al usuario o simplemente no hacer nada
             pass
     
     def close_tab(self, index):
